@@ -6,3 +6,8 @@ In Spring 2024, in my "Programming Language Concepts" class, we had to make a ga
 
 ## How to play
 Stay tuned...
+
+## Acknowledgements
+Assignment idea by Dr. Nigel Ward, professor at the University of Texas at El Paso.
+
+I'll take down this project if it becomes the subject of plagiarism for school assignments. If you're an instructor, just shoot me an email at ashkan.arabim@gmail.com and I'll do it.
