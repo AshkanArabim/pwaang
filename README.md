@@ -58,6 +58,6 @@ W   5   .   1   E
 Stay tuned...
 
 ## Acknowledgements
-Assignment idea by (Dr. Nigel Ward)[https://scholar.google.com/citations?user=ncnkwCMAAAAJ&hl], professor at the University of Texas at El Paso.
+Assignment idea and part of the implementation by [Dr. Nigel Ward](https://scholar.google.com/citations?user=ncnkwCMAAAAJ&hl), professor at the University of Texas at El Paso.
 
 I'll take down this project if it becomes the subject of plagiarism for school assignments. If you're an instructor, just shoot me an email at ashkan.arabim@gmail.com and I'll do it.
