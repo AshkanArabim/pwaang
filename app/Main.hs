@@ -1,6 +1,13 @@
+module Main (main) where
+
+import Lib
+
 -- PWANG :: Professor Ward's Abolutely Amazing New Game,  Spring 2024
 
+import System.Random
+
 -----------  Data Type Definitions ------------
+
 
 data Bean = Pinto | White       --  like enumerate
 
@@ -233,3 +240,7 @@ testResults = [
     Win == handleMove winnableBoard3 White 4 6               -- :30  *fail 
     ]
 
+
+
+main :: IO ()
+main = someFunc
