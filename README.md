@@ -1,4 +1,4 @@
-# pwaang
+# PWAANG
 Extended version of a Haskell class assignment
 
 ## Background
