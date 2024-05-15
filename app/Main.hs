@@ -179,7 +179,8 @@ classicInitialBoard = [(0, Pinto), (1, Pinto), (2, Pinto), (6, White), (7, White
 possibleSequences :: [(Integer, Bean)] -> Bean -> Integer -> Integer -> [Integer]
 possibleSequences board bean cell die
     | cell < 0 = [] -- base case
-    | (contains board cell bean) && (moveOutOfBounds cell die) = cell : possibleSequences board bean (cell - 1) die
+    -- note: checked till here ^^, processing vv
+    | (contains board cell bean) && not (moveOutOfBounds cell die) = cell : possibleSequences board bean (cell - 1) die
     | otherwise = possibleSequences board bean (cell - 1) die
 
 -- prompts the user to select one of their possible cells to move until they enter something valid
