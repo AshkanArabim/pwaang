@@ -203,7 +203,6 @@ gameLoop :: [(Integer, Bean)] -> Bean -> IO Bean
 gameLoop board bean = do
     die <- rollDie
     putStrLn $ "---------------- " ++ show bean ++ "'s turn ----------------"
-    putStrLn $ (show bean) ++ "'s turn."
     putStrLn $ "Die: " ++ show die
     putStrLn $ "Direction: " ++ nameOfMove die
     movableBeans <- return $ possibleSequences board bean 8 die
