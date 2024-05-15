@@ -1,6 +1,5 @@
 module Main (main, handleMove) where
 
-import Lib
 import qualified System.Random.Stateful as RS
 
 ----------------  Data Type Definitions  ----------------
@@ -32,7 +31,7 @@ instance Eq Result where
 ----------------  Game Logic: Inventory of the Possible Moves  ----------------
 
 -- the dice roles range from 1 to 8, naming the directions counterclockwise from 1 for East
-nameOfMove :: Int -> String
+nameOfMove :: Integer -> String
 nameOfMove 1 = "east"
 nameOfMove 2 = "northeast"
 nameOfMove 3 = "north"
@@ -50,19 +49,25 @@ contains (x:xs) cell bean = (cell == (fst x)) && (bean == (snd x)) || contains x
 
 -- at :: [(Integer, Bean)] -> Integer -> Bean ->  String
 at board cell
-    | contains board cell Pinto     = "p"
-    | contains board cell White   = "w"
-    | otherwise                               = "-"
+    | contains board cell Pinto = "p"
+    | contains board cell White = "w"
+    | otherwise = "."
 
 -- prints the grid
-rowString ::  [(Integer, Bean)] ->  [Integer]-> String
-rowString board cells =  (foldl (++)   " " (map (\pos -> at board pos)  cells)) ++ "\n"
+rowString :: [(Integer, Bean)] -> [Integer] -> String
+rowString board cells =  (foldl (++) " " (map (\pos -> at board pos)  cells)) ++ "\n"
 
-showBoard  :: [(Integer, Bean)] -> IO ()
-showBoard board =  putStr(foldr (++) "" (map (\row ->  rowString board [row*3..row*3+2])  [0..2]))
+showBoard :: [(Integer, Bean)] -> IO ()
+showBoard board =  putStr(foldl (flip (++)) "" (map (\row ->  rowString board [row*3..row*3+2]) [0..2]))
+
+-- highlights selected cells
+rowSelectedString :: [Integer] -> [Integer] -> String
+rowSelectedString selectedCells rowBounds =  (foldl (++) " " (map (\pos -> if elem pos selectedCells then show pos else ".") rowBounds)) ++ "\n"
+
+showSelectedCells :: [Integer] -> IO ()
+showSelectedCells selectedCells = putStr(foldl (flip (++)) "" (map (\row -> rowSelectedString selectedCells [row*3..row*3+2])  [0..2]))
 
 -- helper function, enables, e.g.,  search 3 [ (1,2), (2,4), (3,9)]  to get 9 
--- ques: what the hell is this for???
 search ::  Integer -> [(Integer, Integer)] -> Integer
 search key [] = 0
 search key ((k,v) : xs)  = if key == k
@@ -159,18 +164,66 @@ handleMove board bean cell die
 ---------------- main loop & related components ----------------
 
 -- random number generator, from 1 to 8 inclusive
-rollDie :: IO Int
+rollDie :: IO Integer
 rollDie = RS.uniformRM (1, 8) RS.globalStdGen
 
 -- for I/O purposes cells are numbered like this
 ---  6 7 8 
 ---  3 4 5
 ---  0 1 2
+
+classicInitialBoard :: [(Integer, Bean)]
 classicInitialBoard = [(0, Pinto), (1, Pinto), (2, Pinto), (6, White), (7, White), (8, White)]
+
+-- get a list of all cells that the player can select to move
+possibleSequences :: [(Integer, Bean)] -> Bean -> Integer -> Integer -> [Integer]
+possibleSequences board bean cell die
+    | cell < 0 = [] -- base case
+    | (contains board cell bean) && (moveOutOfBounds cell die) = cell : possibleSequences board bean (cell - 1) die
+    | otherwise = possibleSequences board bean (cell - 1) die
+
+-- prompts the user to select one of their possible cells to move until they enter something valid
+getValidInput :: [(Integer, Bean)] -> [Integer] -> Bean -> Integer -> IO Integer
+getValidInput board validCells bean die = do
+    putStrLn "Your possible moves:"
+    showSelectedCells validCells
+    putStrLn "Full board:"
+    showBoard board
+
+    inputStr <- getLine
+    let input = read inputStr :: Integer
+    if elem input validCells 
+        then do return input
+        else do -- in case of invalid choice, ask again
+            putStrLn "Invalid option. Try again..."
+            getValidInput board validCells bean die
+
+-- Runs a loop until someone wins, then returns the winning Bean
+gameLoop :: [(Integer, Bean)] -> Bean -> IO Bean
+gameLoop board bean = do
+    die <- rollDie
+    putStrLn $ "---------------- " ++ show bean ++ "'s turn ----------------"
+    putStrLn $ (show bean) ++ "'s turn."
+    putStrLn $ "Die: " ++ show die
+    putStrLn $ "Direction: " ++ nameOfMove die
+    movableBeans <- return $ possibleSequences board bean 8 die
+    if length movableBeans <= 0 
+        then do
+            putStrLn "No valid moves available based on this direction..."
+            gameLoop board (next bean)
+        else do
+            chosenCell <- getValidInput board movableBeans bean die
+            newBoard <- return $ updateBoard board chosenCell die
+            if isWin newBoard bean 
+                then do return bean
+                else gameLoop newBoard (next bean)
 
 main :: IO ()
 main = do
-    someFunc
-    -- debug: testing...
-    dieResult <- rollDie
-    print dieResult
+    putStrLn "Welcome to PWAANG!"
+    putStrLn "Read the README to learn how to play."
+    putStrLn "----"
+    putStrLn "Game started!"
+    winner <- gameLoop classicInitialBoard Pinto
+    putStrLn "Game over!"
+    putStrLn $ "The winner is: " ++ show winner
