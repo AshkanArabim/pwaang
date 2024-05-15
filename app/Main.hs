@@ -1,6 +1,7 @@
 module Main (main, handleMove) where
 
 import qualified System.Random.Stateful as RS
+import Text.Read (readMaybe)
 
 ----------------  Data Type Definitions  ----------------
 
@@ -191,12 +192,17 @@ getValidInput board validCells bean die = do
     putStrLn "Full board:"
     showBoard board
 
+    putStrLn ">> Enter a valid cell to move:"
     inputStr <- getLine
-    let input = read inputStr :: Integer
-    if elem input validCells 
-        then do return input
-        else do -- in case of invalid choice, ask again
-            putStrLn "Invalid option. Try again..."
+    case readMaybe inputStr of
+        Just input -> do 
+            if elem input validCells
+                then do return input
+                else do
+                    putStrLn "Invalid cell. Try again..."
+                    getValidInput board validCells bean die
+        Nothing -> do
+            putStrLn "That's not a number!!"
             getValidInput board validCells bean die
 
 -- Runs a loop until someone wins, then returns the winning Bean
