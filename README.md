@@ -57,6 +57,11 @@ W   5   .   1   E
 ## How to set up & play
 Stay tuned...
 
+## Screenshots
+![Mid-game screenshot](https://github.com/AshkanArabim/pwaang-extended/assets/71609332/a9daeba6-282d-4304-804d-96ac062299ca)
+![Game over screenshot](https://github.com/AshkanArabim/pwaang-extended/assets/71609332/52f6f944-c487-42bd-a43c-48266c1c87c2)
+
+
 ## Acknowledgements
 Assignment idea and part of the implementation by [Dr. Nigel Ward](https://scholar.google.com/citations?user=ncnkwCMAAAAJ&hl), professor at the University of Texas at El Paso.
 
