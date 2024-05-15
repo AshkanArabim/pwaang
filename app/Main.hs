@@ -1,6 +1,7 @@
 module Main (main, handleMove) where
 
 import Lib
+import qualified System.Random.Stateful as RS
 
 ----------------  Data Type Definitions  ----------------
 
@@ -157,6 +158,10 @@ handleMove board bean cell die
 
 ---------------- main loop & related components ----------------
 
+-- random number generator, from 1 to 8 inclusive
+rollDie :: IO Int
+rollDie = RS.uniformRM (1, 8) RS.globalStdGen
+
 -- for I/O purposes cells are numbered like this
 ---  6 7 8 
 ---  3 4 5
@@ -166,3 +171,6 @@ classicInitialBoard = [(0, Pinto), (1, Pinto), (2, Pinto), (6, White), (7, White
 main :: IO ()
 main = do
     someFunc
+    -- debug: testing...
+    dieResult <- rollDie
+    print dieResult
