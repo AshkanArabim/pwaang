@@ -2,7 +2,7 @@
 Extended version of a Haskell class assignment.
 
 ## Background
-In Spring 2024, in my "Programming Language Concepts" class, we had to make a game called PWAANG (Professor Ward's Amazingly Awesome New Game). The original assignment just required us to satisfy a few test-cases, but I decided to implement the full game after the end of the semester to flex dem skillz.
+In Spring 2024, in my "Programming Language Concepts" class, we had to make a game called PWAANG (Professor Ward's Amazingly Awesome New Game). The original assignment just required us to satisfy a few test-cases, but I decided to implement the full game after the end of the semester to flex dem skillz (and learn some extra Haskell in the process).
 
 ## Rules
 - This is a two-player game.
@@ -50,12 +50,18 @@ W   5   .   1   E
         S
 ```
 - There are three things that can happen after each person rolls their die:
-  - If the direction determined by the die is impossible given the current position of beans, the turn is skipped.
-  - If opponent has no beans left after the player makes a move, the player wins.
-  - If none of the above happen, the player gets to choose a bean to move, and the game continues.
+  - If the direction determined by the die is impossible given the current position of the player's beans, the turn is skipped.
+  - If a move is possible, the player will enter the location of the bean that they want to move (see [rules](#rules)).
+  - After the move is made, if the opponent has no beans left, the player wins. If not, game continues.
 
 ## How to set up & play
-Stay tuned...
+1. Install Haskell and Stack (varies a lot depending on your OS; see [this](https://docs.haskellstack.org/en/stable/install_and_upgrade/) guide)
+2. Clone this repo.
+3. `cd` into the repo folder.
+4. Run `stack build`
+   1. You may have to isntall some Haskell modules using Stack in this phase. 
+5. Run `stack exec pwaang-extended-exe`
+6. Start playing!
 
 ## Screenshots
 ![Mid-game screenshot](https://github.com/AshkanArabim/pwaang-extended/assets/71609332/a9daeba6-282d-4304-804d-96ac062299ca)
